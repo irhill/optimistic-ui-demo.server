@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +13,11 @@ import (
 )
 
 func main() {
+	// force failure of requests?
+	var forceFailure bool
+	flag.BoolVar(&forceFailure, "fail", false, "Force failure")
+	flag.Parse()
+
 	// initialise the pgx middleware
 	pgxMiddleware, err := NewPgxMiddleware()
 	if err != nil {
@@ -19,7 +25,7 @@ func main() {
 	}
 
 	// setup router
-	router := SetupRouter(pgxMiddleware)
+	router := SetupRouter(pgxMiddleware, forceFailure)
 
 	// handle graceful shutdown
 	srv := &http.Server{

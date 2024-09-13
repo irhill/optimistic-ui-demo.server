@@ -7,10 +7,14 @@ import (
 	"time"
 )
 
-func SetupRouter(pgxMiddleware *PgxMiddleware) *gin.Engine {
+func SetupRouter(pgxMiddleware *PgxMiddleware, failure bool) *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.Default())
 	router.Use(DelayMiddleware(2 * time.Second))
+	if failure {
+		// this middleware will fail any request sent to the router
+		router.Use(ForceFailureMiddleware())
+	}
 	router.Use(pgxMiddleware.Middleware())
 
 	initialiseRoutes(router)
