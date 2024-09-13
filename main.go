@@ -15,7 +15,7 @@ import (
 
 func main() {
 
-	// force failure of requests?
+	// force failure of POST requests?
 	var teapot bool
 	flag.BoolVar(&teapot, "teapot", false, "Is the server a teapot?")
 	flag.Parse()

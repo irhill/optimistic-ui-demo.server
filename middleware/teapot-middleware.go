@@ -8,7 +8,13 @@ import (
 
 func TeapotMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_ = c.AbortWithError(http.StatusTeapot, errors.New("error: no coffee for you"))
-		return
+		method := c.Request.Method
+
+		if method == "POST" {
+			_ = c.AbortWithError(http.StatusTeapot, errors.New("error: no coffee for you"))
+			return
+		} else {
+			c.Next()
+		}
 	}
 }
