@@ -3,17 +3,18 @@ package main
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"optimistic-ui-demo/middleware"
 	"optimistic-ui-demo/users"
 	"time"
 )
 
-func SetupRouter(pgxMiddleware *PgxMiddleware, failure bool) *gin.Engine {
+func SetupRouter(pgxMiddleware *middleware.PgxMiddleware, teapot bool) *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.Default())
-	router.Use(DelayMiddleware(2 * time.Second))
-	if failure {
+	router.Use(middleware.DelayMiddleware(2 * time.Second))
+	if teapot {
 		// this middleware will fail any request sent to the router
-		router.Use(ForceFailureMiddleware())
+		router.Use(middleware.TeapotMiddleware())
 	}
 	router.Use(pgxMiddleware.Middleware())
 

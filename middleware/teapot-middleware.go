@@ -1,4 +1,4 @@
-package main
+package middleware
 
 import (
 	"errors"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func ForceFailureMiddleware() gin.HandlerFunc {
+func TeapotMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_ = c.AbortWithError(http.StatusTeapot, errors.New("error: no coffee for you"))
 		return

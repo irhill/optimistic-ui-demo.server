@@ -6,6 +6,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"optimistic-ui-demo/middleware"
 	"os"
 	"os/signal"
 	"syscall"
@@ -13,19 +14,20 @@ import (
 )
 
 func main() {
+
 	// force failure of requests?
-	var forceFailure bool
-	flag.BoolVar(&forceFailure, "fail", false, "Force failure")
+	var teapot bool
+	flag.BoolVar(&teapot, "teapot", false, "Is the server a teapot?")
 	flag.Parse()
 
 	// initialise the pgx middleware
-	pgxMiddleware, err := NewPgxMiddleware()
+	pgxMiddleware, err := middleware.NewPgxMiddleware()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// setup router
-	router := SetupRouter(pgxMiddleware, forceFailure)
+	router := SetupRouter(pgxMiddleware, teapot)
 
 	// handle graceful shutdown
 	srv := &http.Server{
