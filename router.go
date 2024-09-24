@@ -8,14 +8,21 @@ import (
 	"time"
 )
 
-func SetupRouter(pgxMiddleware *middleware.PgxMiddleware, teapot bool) *gin.Engine {
+func SetupRouter(pgxMiddleware *middleware.PgxMiddleware, delay int, teapot bool) *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.Default())
-	router.Use(middleware.DelayMiddleware(2 * time.Second))
+
+	if delay > 0 {
+		// this middleware will delay all responses by the given duration
+		delayDuration := time.Duration(delay) * time.Millisecond
+		router.Use(middleware.DelayMiddleware(delayDuration))
+	}
+
 	if teapot {
 		// this middleware will fail any request sent to the router
 		router.Use(middleware.TeapotMiddleware())
 	}
+
 	router.Use(pgxMiddleware.Middleware())
 
 	initialiseRoutes(router)

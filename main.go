@@ -17,6 +17,8 @@ func main() {
 
 	// force failure of POST requests?
 	var teapot bool
+	var delay int
+	flag.IntVar(&delay, "delay", 0, "How long to delay responses (ms)?")
 	flag.BoolVar(&teapot, "teapot", false, "Is the server a teapot?")
 	flag.Parse()
 
@@ -27,7 +29,7 @@ func main() {
 	}
 
 	// setup router
-	router := SetupRouter(pgxMiddleware, teapot)
+	router := SetupRouter(pgxMiddleware, delay, teapot)
 
 	// handle graceful shutdown
 	srv := &http.Server{
