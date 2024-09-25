@@ -7,4 +7,5 @@ type user struct {
 	Forename string      `json:"forename" binding:"required"`
 	Surname  string      `json:"surname" binding:"required"`
 	Dob      pgtype.Date `json:"dob" binding:"required"`
+	FullName string      `json:"fullName,omitempty"`
 }

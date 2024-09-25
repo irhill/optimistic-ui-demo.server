@@ -14,8 +14,6 @@ import (
 )
 
 func main() {
-
-	// force failure of POST requests?
 	var teapot bool
 	var delay int
 	flag.IntVar(&delay, "delay", 0, "How long to delay responses (ms)?")
